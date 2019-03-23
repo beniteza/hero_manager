@@ -8,6 +8,9 @@ import Header from "./components/layout/Header";
 import AddHero from "./components/heroes/AddHero";
 import EditHero from "./components/heroes/EditHero";
 import About from "./components/pages/About";
+import Login from "./components/user_access/Login";
+import Logout from "./components/user_access/Logout";
+import Register from "./components/user_access/Register";
 import NotFound from "./components/pages/NotFound";
 
 import { Provider } from "./context";
@@ -31,6 +34,9 @@ class App extends Component {
                 <Route exact path="/hero/add" component={AddHero} />
                 <Route exact path="/hero/edit/:id" component={EditHero} />
                 <Route exact path="/about" component={About} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/logout" component={Logout} />
+                <Route exact path="/register" component={Register} />
                 {/* Not Found Route */}
                 <Route component={NotFound} />
               </Switch>
