@@ -1,3 +1,80 @@
+import React, { Component } from "react";
+import { Consumer } from "../../context";
+
+// For Linking
+import { Link } from "react-router-dom";
+
+class Header extends Component {
+  render() {
+    const { branding } = this.props;
+    return (
+      <Consumer>
+        {value => {
+          const { isLoggedIn } = value;
+          return (
+            <nav className="navbar navbar-expand-sm navbar-dark bg-danger mb-3 py-0">
+              <div className="container">
+                <a href="/" className="navbar-brand">
+                  {branding}
+                </a>
+                <div className="">
+                  <ul className="navbar-nav mr-auto">
+                    <li className="nav-item">
+                      <Link to="/" className="nav-link">
+                        <i className="fas fa-home" /> Home
+                      </Link>
+                    </li>
+
+                    {isLoggedIn
+                      ? [
+                          <li className="nav-item">
+                            <Link to="/hero/add" className="nav-link">
+                              <i className="fas fa-plus" /> Add
+                            </Link>
+                          </li>,
+                          <li className="nav-item">
+                            <Link to="/users" className="nav-link">
+                              <i className="fas fa-user" /> Users
+                            </Link>
+                          </li>,
+                          <li className="nav-item">
+                            <Link to="/logout" className="nav-link">
+                              Logout
+                            </Link>
+                          </li>
+                        ]
+                      : [
+                          <li className="nav-item">
+                            <Link to="/login" className="nav-link">
+                              Login
+                            </Link>
+                          </li>,
+                          <li className="nav-item">
+                            <Link to="/register" className="nav-link">
+                              Register
+                            </Link>
+                          </li>
+                        ]}
+                    <li className="nav-item">
+                      <Link to="/about" className="nav-link">
+                        <i className="fas fa-question" /> About
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+          );
+        }}
+      </Consumer>
+    );
+  }
+}
+
+export default Header;
+
+/*
+//Funtional Comp
 import React from "react";
 import PropTypes from "prop-types";
 
@@ -22,6 +99,11 @@ const Header = props => {
             <li className="nav-item">
               <Link to="/hero/add" className="nav-link">
                 <i className="fas fa-plus" /> Add
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/users" className="nav-link">
+                <i className="fas fa-user" /> Users
               </Link>
             </li>
             <li className="nav-item">
@@ -61,3 +143,4 @@ Header.propTypes = {
 };
 
 export default Header;
+*/

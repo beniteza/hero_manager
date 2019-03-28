@@ -4,7 +4,7 @@ import { Consumer } from "../../context";
 import TextInputGroup from "../layout/TextInputGroup";
 
 //Gens ids (TESTING)
-import uuid from "uuid";
+// import uuid from "uuid";
 
 import axios from "axios";
 import qs from "qs";

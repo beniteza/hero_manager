@@ -29,6 +29,11 @@ const reducer = (state, action) => {
           hero.id === action.payload[0].id ? (hero = action.payload[0]) : hero
         )
       };
+    case "IS_LOGGED_IN":
+      return {
+        ...state,
+        isLoggedIn: action.payload
+      };
     default:
       return state;
   }
@@ -38,6 +43,8 @@ const reducer = (state, action) => {
 export class Provider extends Component {
   state = {
     heroes: [],
+    users: [],
+    isLoggedIn: false,
     //dispatch calls the action & is now on the state
     dispatch: action => {
       this.setState(state => reducer(state, action));
@@ -48,8 +55,26 @@ export class Provider extends Component {
   //Lifecycle method & use axios for the fetch (get)
   async componentDidMount() {
     //awaits waits for the async operation to finish
-    const res = await axios.get("http://localhost:5000/heroes");
-    this.setState({ heroes: res.data });
+    // const res = await axios.get("http://localhost:5000/heroes");
+    // this.setState({ heroes: res.data });
+
+    const res_1 = await axios.get("http://localhost:5000/heroes");
+    const heroes = res_1.data;
+    const res_2 = await axios.get("http://localhost:5000/users");
+    const users = res_2.data;
+    const res_3 = await axios.get("http://localhost:5000/status");
+    // const res_3 = await fetch("http://localhost:5000/status", {
+    //   method: "GET",
+    //   credentials: "include"
+    // });
+
+    const isLoggedIn = res_3.data;
+    console.log("STATUS: " + isLoggedIn);
+    this.setState({
+      heroes,
+      users,
+      isLoggedIn
+    });
   }
 
   render() {

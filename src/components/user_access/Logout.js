@@ -1,19 +1,39 @@
 import React, { Component } from "react";
+
+import { Consumer } from "../../context";
+
 import axios from "axios";
 
 class Logout extends Component {
-  onLogout = async () => {
-    const res = await axios.post("http://localhost:5000/logout");
-
-    //Prob have to clear logged in user from state
-    //To Do
-
-    //REDIRECT
+  onSubmit = async (dispatch, e) => {
+    e.preventDefault();
+    axios.get("http://localhost:5000/logout", { withCredentials: true });
+    dispatch({ type: "IS_LOGGED_IN", payload: false });
     this.props.history.push("/");
   };
 
   render() {
-    return this.onLogout();
+    return (
+      <Consumer>
+        {value => {
+          const { dispatch } = value;
+          return (
+            <div className="card mb-3">
+              <div className="card-header">Logout</div>
+              <div className="card-body">
+                <form onSubmit={this.onSubmit.bind(this, dispatch)}>
+                  <input
+                    type="submit"
+                    value="Logout"
+                    className="btn btn-block btn-warning"
+                  />
+                </form>
+              </div>
+            </div>
+          );
+        }}
+      </Consumer>
+    );
   }
 }
 

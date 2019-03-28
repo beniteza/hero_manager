@@ -10,18 +10,15 @@ class Users extends Component {
   render() {
     return (
       <Consumer>
-        {/* Value comes from the Context Provider, so it has the state */}
         {value => {
-          const { heroes } = value;
+          const { users } = value;
           return (
             <React.Fragment>
               <h1 className="display-4 mb-2">
-                <span className="text-danger">Hero</span> List
+                <span className="text-danger">User</span> List
               </h1>
-              {/* Loop through the array */}
-              {/* Pass the state vals to the Hero component */}
-              {heroes.map(hero => (
-                <Hero key={hero.id} hero={hero} />
+              {users.map(user => (
+                <User key={user.id} user={user} />
               ))}
             </React.Fragment>
           );

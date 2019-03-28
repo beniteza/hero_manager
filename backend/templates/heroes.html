@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h1>Heroes <small>Welcome {{ session.username }}</small></h1>
+<a href="/add_hero" class="btn btn-success">Add Hero</a>
+<hr>
+
+<table class="table table-striped">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Ability</th>
+        <th>Power</th>
+        <th>Author</th>
+    </tr>
+    {% for hero in heroes %}
+    <tr>
+        <td>{{hero.id}}</td>
+        <td><a href="heroes/{{hero.id}}">{{hero.name}}</a></td>
+        <td>{{hero.ability}}</td>
+        <td>{{hero.power}}</td>
+        <td>{{hero.author}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

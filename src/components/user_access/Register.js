@@ -47,10 +47,7 @@ class Register extends Component {
       confirm
     };
 
-    const res = await axios.post(
-      "http://localhost:5000/register",
-      qs.stringify(user)
-    );
+    await axios.post("http://localhost:5000/register", qs.stringify(user));
 
     //CLEAR STATE AKA CLEAR WHAT'S ON THE FORM
     this.setState({
@@ -69,7 +66,7 @@ class Register extends Component {
 
     return (
       <div className="card mb-3">
-        <div className="card-header">Login</div>
+        <div className="card-header">Register</div>
         <div className="card-body">
           <form onSubmit={this.onSubmit.bind(this)}>
             <TextInputGroup

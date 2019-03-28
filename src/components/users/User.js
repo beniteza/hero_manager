@@ -1,90 +1,105 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-
+import { Link } from "react-router-dom";
 import axios from "axios";
-
-import { Consumer } from "../../context";
 
 class User extends Component {
   state = {
-    showContactInfo: false
+    showContactInfo: false,
+    following: false
   };
 
-  //Turning this into an arrow func allows it to use 'this' w/o having to bind it
-  onShowClick = e => {
-    //state is immutable, so use this
+  async componentDidMount() {
+    //Get if the current logged in user is following this user
+
+    //Update state
     this.setState({
-      showContactInfo: !this.state.showContactInfo //toggle it
+      ...this.state,
+      following: false
+    });
+  }
+
+  onShowClick = e => {
+    this.setState({
+      ...this.state,
+      showContactInfo: !this.state.showContactInfo
     });
   };
 
-  //on arrows functs we put async before params
-  onDeleteClick = async (id, dispatch) => {
-    //DELETE REQUEST
-    //No need to put this into a var since we won't be using the response
-    await axios.delete(`http://localhost:5000/hero/${id}`);
-    //the action is an obj w/ type & a payload w/ the data
-    dispatch({ type: "DELETE_HERO", payload: id });
+  onFollowClick = async (id, e) => {
+    const res = await axios.post(`http://localhost:5000/followers/add/${id}`);
+
+    this.setState({
+      ...this.state,
+      following: true
+    });
   };
 
   render() {
-    //props contains the hero object that was passed in by the Heroes comp
-    const { id, name, ability, power, author } = this.props.hero;
-    const { showContactInfo } = this.state;
+    const { id, username, password } = this.props.user;
+    const { showContactInfo, following } = this.state;
 
     return (
-      <Consumer>
-        {value => {
-          const { dispatch } = value;
-          //value has heroes & dispatch
-          return (
-            <div className="card card-body mb-3">
-              <h4>
-                {/* Fire off event when the sort-down arrow is clicked */}
-                {name}{" "}
-                <i
-                  onClick={this.onShowClick}
-                  className="fas fa-sort-down"
-                  style={{ cursor: "pointer" /*Makes the click ptr appear*/ }}
-                />
-                {/* Delete button */}
-                <i
-                  className="fas fa-times"
-                  style={{ cursor: "pointer", float: "right", color: "red" }}
-                  // pass this to the delete func. payload is id and also pass dispatch. you got dispatch from destruct the value
-                  onClick={this.onDeleteClick.bind(this, id, dispatch)}
-                />
-                <Link to={`hero/edit/${id}`}>
-                  <i
-                    className="fas fa-pencil-alt"
-                    style={{
-                      cursor: "pointer",
-                      float: "right",
-                      color: "black",
-                      marginRight: "1rem"
-                    }}
-                  />
-                </Link>
-              </h4>
-              {/* If showContactInfo = true then show the info */}
-              {showContactInfo ? (
-                <ul className="list-group">
-                  <li className="list-group-item">Ability: {ability}</li>
-                  <li className="list-group-item">Power: {power}</li>
-                  <li className="list-group-item">Author: {author}</li>
-                </ul>
-              ) : null}
-            </div>
-          );
-        }}
-      </Consumer>
+      <div className="card card-body mb-3">
+        <h4>
+          {username}{" "}
+          <i
+            onClick={this.onShowClick}
+            className="fas fa-sort-down"
+            style={{ cursor: "pointer" }}
+          />
+          {!following ? (
+            <i
+              onClick={this.onFollowClick.bind(this, id)}
+              className="fas fa-adjust"
+              style={{
+                cursor: "pointer",
+                float: "right",
+                color: "blue",
+                marginRight: "1rem"
+              }}
+            />
+          ) : (
+            <i
+              className="fas fa-adjust"
+              style={{
+                cursor: "pointer",
+                float: "right",
+                color: "yellow",
+                marginRight: "1rem"
+              }}
+            />
+          )}
+          {/* <Link to={`user/heroes/${id}`}> */}
+          <Link
+            to={{
+              pathname: `user/heroes/${id}`,
+              state: { username }
+            }}
+          >
+            <i
+              className="fas fa-robot"
+              style={{
+                cursor: "pointer",
+                float: "right",
+                color: "green",
+                marginRight: "1rem"
+              }}
+            />
+          </Link>
+        </h4>
+        {showContactInfo ? (
+          <ul className="list-group">
+            <li className="list-group-item">Password: {password}</li>
+          </ul>
+        ) : null}
+      </div>
     );
   }
 }
 
-Hero.propTypes = {
-  hero: PropTypes.object.isRequired
+User.propTypes = {
+  user: PropTypes.object.isRequired
 };
 
 export default User;

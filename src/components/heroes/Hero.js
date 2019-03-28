@@ -8,14 +8,35 @@ import { Consumer } from "../../context";
 
 class Hero extends Component {
   state = {
-    showContactInfo: false
+    showContactInfo: false,
+    wasAdded: true
   };
+
+  componentDidMount() {
+    //Get if the current hero was added to the user's collection
+
+    //Update state
+    this.setState({
+      ...this.state,
+      wasAdded: false
+    });
+  }
 
   //Turning this into an arrow func allows it to use 'this' w/o having to bind it
   onShowClick = e => {
     //state is immutable, so use this
     this.setState({
+      ...this.state,
       showContactInfo: !this.state.showContactInfo //toggle it
+    });
+  };
+
+  onAddToCollectionClick = async (id, e) => {
+    const res = await axios.post(`http://localhost:5000/collection/add/${id}`);
+
+    this.setState({
+      ...this.state,
+      wasAdded: true
     });
   };
 
@@ -31,12 +52,13 @@ class Hero extends Component {
   render() {
     //props contains the hero object that was passed in by the Heroes comp
     const { id, name, ability, power, author } = this.props.hero;
-    const { showContactInfo } = this.state;
+    const { showContactInfo, wasAdded } = this.state;
 
     return (
       <Consumer>
         {value => {
           const { dispatch } = value;
+          const { wasAdded } = this.state;
           //value has heroes & dispatch
           return (
             <div className="card card-body mb-3">
@@ -55,6 +77,28 @@ class Hero extends Component {
                   // pass this to the delete func. payload is id and also pass dispatch. you got dispatch from destruct the value
                   onClick={this.onDeleteClick.bind(this, id, dispatch)}
                 />
+                {!wasAdded ? (
+                  <i
+                    onClick={this.onAddToCollectionClick.bind(this, id)}
+                    className="fas fa-adjust"
+                    style={{
+                      cursor: "pointer",
+                      float: "right",
+                      color: "green",
+                      marginRight: "1rem"
+                    }}
+                  />
+                ) : (
+                  <i
+                    className="fas fa-adjust"
+                    style={{
+                      cursor: "pointer",
+                      float: "right",
+                      color: "purple",
+                      marginRight: "1rem"
+                    }}
+                  />
+                )}
                 <Link to={`hero/edit/${id}`}>
                   <i
                     className="fas fa-pencil-alt"
