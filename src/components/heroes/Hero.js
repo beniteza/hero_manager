@@ -9,16 +9,25 @@ import { Consumer } from "../../context";
 class Hero extends Component {
   state = {
     showContactInfo: false,
-    wasAdded: true
+    wasAdded: false
   };
 
   componentDidMount() {
     //Get if the current hero was added to the user's collection
+    const { hero_collection } = this.props;
+    const { id } = this.props.hero;
+
+    let wasAdded = false;
+    hero_collection.forEach(hero => {
+      if (hero.hero_id === id) {
+        wasAdded = true;
+      }
+    });
 
     //Update state
     this.setState({
       ...this.state,
-      wasAdded: false
+      wasAdded: wasAdded
     });
   }
 
@@ -32,7 +41,7 @@ class Hero extends Component {
   };
 
   onAddToCollectionClick = async (id, e) => {
-    const res = await axios.post(`http://localhost:5000/collection/add/${id}`);
+    const res = await axios.post(`/collection/add/${id}`);
 
     this.setState({
       ...this.state,
@@ -44,7 +53,7 @@ class Hero extends Component {
   onDeleteClick = async (id, dispatch) => {
     //DELETE REQUEST
     //No need to put this into a var since we won't be using the response
-    await axios.delete(`http://localhost:5000/hero/${id}`);
+    await axios.delete(`/hero/${id}`);
     //the action is an obj w/ type & a payload w/ the data
     dispatch({ type: "DELETE_HERO", payload: id });
   };
@@ -54,16 +63,11 @@ class Hero extends Component {
     const { id, name, ability, power, author } = this.props.hero;
     const { showContactInfo, wasAdded } = this.state;
 
-    /*
-      - Find a way to check if the user is the author of the hero and allow him to edit it
-      - Remove delete funct
-    */
-
     return (
       <Consumer>
         {value => {
           const { dispatch, isLoggedIn } = value;
-          //value has heroes & dispatch
+
           return (
             <div className="card card-body mb-3">
               <h4>
@@ -120,6 +124,19 @@ class Hero extends Component {
     );
   }
 }
+
+//redirect context api collection to props to access in compDidMount
+// const MapHeroCollection = () => (
+//   <Consumer>
+//     {value => <Hero hero_collection={value.hero_collection} />}
+//   </Consumer>
+// );
+
+// export default React.forwardRef((props, ref) => (
+//   <Consumer>
+//     {value => <Hero hero_collection={value.hero_collection} />}
+//   </Consumer>
+// ));
 
 Hero.propTypes = {
   hero: PropTypes.object.isRequired

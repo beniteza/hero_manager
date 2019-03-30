@@ -7,12 +7,8 @@ import axios from "axios";
 class Logout extends Component {
   onSubmit = async (dispatch, e) => {
     e.preventDefault();
-
-    //WOOOOOOOOOOO-----------OOOO--------OOOOOOOOOOOOOOOOOOO
-
     axios.get("/logout");
-
-    // axios.get("http://localhost:5000/logout");
+    dispatch({ type: "LOGGED_USER", payload: {} });
     dispatch({ type: "IS_LOGGED_IN", payload: false });
     this.props.history.push("/");
   };

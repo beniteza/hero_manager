@@ -29,6 +29,11 @@ const reducer = (state, action) => {
           hero.id === action.payload[0].id ? (hero = action.payload[0]) : hero
         )
       };
+    case "LOGGED_USER":
+      return {
+        ...state,
+        logged_user: action.payload
+      };
     case "IS_LOGGED_IN":
       return {
         ...state,
@@ -45,6 +50,8 @@ export class Provider extends Component {
     heroes: [],
     users: [],
     isLoggedIn: false,
+    logged_user: {},
+    hero_collection: [],
     //dispatch calls the action & is now on the state
     dispatch: action => {
       this.setState(state => reducer(state, action));
@@ -58,13 +65,27 @@ export class Provider extends Component {
     const res_2 = await axios.get("/users");
     const users = res_2.data;
     const res_3 = await axios.get("/status");
-
     const isLoggedIn = res_3.data;
-    console.log("STATUS: " + isLoggedIn);
+    const res_4 = await axios.get("/logged");
+    let logged_user;
+    if (res_4.data === "INVALID") {
+      logged_user = {};
+    } else {
+      logged_user = res_4.data[0];
+    }
+
+    let hero_collection = [];
+    if (isLoggedIn) {
+      const res_5 = await axios.get(`/collection/${logged_user.id}`);
+      hero_collection = res_5.data;
+    }
+
     this.setState({
       heroes,
       users,
-      isLoggedIn
+      isLoggedIn,
+      logged_user,
+      hero_collection
     });
   }
 

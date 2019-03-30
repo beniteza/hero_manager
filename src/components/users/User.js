@@ -6,20 +6,32 @@ import axios from "axios";
 class User extends Component {
   state = {
     showContactInfo: false,
-    following: false
+    following: false,
+    followers: []
   };
 
+  constructor(props) {
+    super(props);
+  }
+
   async componentDidMount() {
-    //Get if the current logged in user is following this user
-    /*
-      - Route/Request that checks if logged-in user follows the user
-      - Returns true/false
-    */
+    const { id } = this.props.user;
+    const res = await axios.get(`/followers/${id}`);
+    const followers = res.data;
+
+    const { logged_user } = this.props;
+
+    let following = false;
+    followers.forEach(follower => {
+      if (follower.follower_id === logged_user.id) {
+        following = true;
+      }
+    });
 
     //Update state
     this.setState({
       ...this.state,
-      following: false
+      following: following
     });
   }
 
@@ -31,7 +43,7 @@ class User extends Component {
   };
 
   onFollowClick = async (id, e) => {
-    const res = await axios.post(`/followers/add/${id}`);
+    await axios.post(`/followers/add/${id}`);
 
     this.setState({
       ...this.state,
@@ -41,7 +53,9 @@ class User extends Component {
 
   render() {
     const { id, username, password } = this.props.user;
-    const { showContactInfo, following } = this.state;
+    const { logged_user } = this.props;
+
+    const { showContactInfo, following, followers } = this.state;
 
     return (
       <div className="card card-body mb-3">
@@ -53,7 +67,7 @@ class User extends Component {
             style={{ cursor: "pointer" }}
           />
           <i
-            hidden={following}
+            hidden={following || id === logged_user.id}
             onClick={this.onFollowClick.bind(this, id)}
             className="fas fa-user-plus"
             style={{

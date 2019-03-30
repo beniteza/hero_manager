@@ -29,7 +29,7 @@ class App extends Component {
       <Provider>
         <Router>
           <div className="App">
-            <Header branding="Hero Manager" />
+            <Header branding="Endgame" />
             <div className="container">
               {/* All the routes go inside this container & comps are displayed when their route is taken */}
               <Switch>

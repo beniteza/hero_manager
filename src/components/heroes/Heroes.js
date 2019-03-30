@@ -12,7 +12,7 @@ class Heroes extends Component {
       <Consumer>
         {/* Value comes from the Context Provider, so it has the state */}
         {value => {
-          const { heroes } = value;
+          const { heroes, hero_collection } = value;
           return (
             <React.Fragment>
               <h1 className="display-4 mb-2">
@@ -21,7 +21,11 @@ class Heroes extends Component {
               {/* Loop through the array */}
               {/* Pass the state vals to the Hero component */}
               {heroes.map(hero => (
-                <Hero key={hero.id} hero={hero} />
+                <Hero
+                  key={hero.id}
+                  hero={hero}
+                  hero_collection={hero_collection}
+                />
               ))}
             </React.Fragment>
           );

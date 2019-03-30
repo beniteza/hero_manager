@@ -1,9 +1,11 @@
-from flask import render_template, flash, redirect, url_for, session, request, jsonify
+from flask import session, request
 from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
 
 from dbconfig import DatabaseConfig
 from handler.forms import RegisterForm, HeroForm
+
+from dao.users_dao import Users_DAO
 
 app = DatabaseConfig()
 mysql = MySQL(app)
@@ -70,8 +72,12 @@ class User_Access_DAO:
 
     def status(self):
         if 'logged_in' in session:
-            # return jsonify(True)
             return True
         else:
-            # return jsonify(False)
             return False
+
+    def get_logged_user(self):
+        if 'logged_in' in session:
+            return Users_DAO().single_user(session['id'])
+        else:
+            return 'INVALID'

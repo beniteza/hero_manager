@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, session, request, jsonify
+from flask import session, request
 from flask_mysqldb import MySQL
 
 from dbconfig import DatabaseConfig
@@ -19,23 +19,17 @@ class Heroes_DAO:
         heroes = cur.fetchall()  # fetches in dict form
         # Close
         cur.close()
-        # return jsonify(heroes)
         return heroes
 
     def user_heroes(self, id):
-        # Create cursor
         cur = mysql.connection.cursor()
-        # Get author
         result = cur.execute("SELECT * FROM users WHERE id = %s", [id])
         author = cur.fetchall()  # fetches in dict form
 
-        # Get heroes
         result = cur.execute(
             "SELECT * FROM heroes WHERE author = %s", [author[0]['username']])
-        heroes = cur.fetchall()  # fetches in dict form
-        # Close
+        heroes = cur.fetchall()
         cur.close()
-        # return jsonify(heroes)
         return heroes
 
     def hero(self, id):

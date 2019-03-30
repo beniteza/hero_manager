@@ -14,14 +14,6 @@ import os
 app = DatabaseConfig()
 mysql = MySQL(app)
 
-# cors = CORS(app, resources={r"/*": {"origins": "*"}})
-# cors = CORS(app, resources={
-#             r"/*": {"origins": "*"}, Access-Control-Allow-Headers: Set-Cookie})
-# app.config['Access-Control-Allow-Headers'] = 'Set-Cookie'
-# CORS(app, supports_credentials=True, send_wildcard=True)
-
-# CORS(app, supports_credentials=True)
-
 
 @app.route('/')
 def index():
@@ -46,7 +38,6 @@ def login_get():
 
 
 @app.route('/login', methods=['POST'])
-# @cross_origin(supports_credentials=True)
 # @is_logged_out
 def login_post():
     return User_Access().login_post()
@@ -127,6 +118,11 @@ def add_hero():
 @app.route('/status')
 def status():
     return User_Access().status()
+
+
+@app.route('/logged')
+def get_logged_user():
+    return User_Access().get_logged_user()
 
 
 if __name__ == '__main__':

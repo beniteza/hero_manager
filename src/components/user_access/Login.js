@@ -50,6 +50,9 @@ class Login extends Component {
       return;
     }
 
+    const res_2 = await axios.get("/logged");
+
+    dispatch({ type: "LOGGED_USER", payload: res_2.data[0] });
     dispatch({ type: "IS_LOGGED_IN", payload: true });
 
     this.setState({

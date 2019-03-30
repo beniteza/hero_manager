@@ -23,3 +23,9 @@ class User_Access:
     def status(self):
         result = User_Access_DAO().status()
         return jsonify(result)
+
+    def get_logged_user(self):
+        result = User_Access_DAO().get_logged_user()
+        if(result == 'INVALID'):
+            return result
+        return jsonify(result)
