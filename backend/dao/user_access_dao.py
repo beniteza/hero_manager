@@ -18,29 +18,14 @@ class User_Access_DAO:
             username = form.username.data
             password = sha256_crypt.encrypt(str(form.password.data))
 
-            # create cursor
             cur = mysql.connection.cursor()
-
-            # execute query
             cur.execute(
                 "INSERT INTO users(username, password) VALUES (%s, %s)", (username, password))
-
-            # commit to db
             mysql.connection.commit()
-
-            # close connection
             cur.close()
-
-            # # flash msg
-            # flash('You are now registered and can log in', 'success')
-
-            # return redirect(url_for('login_get'))
-
-        # return render_template('register.html', form=form)
         return 'User Registered'
 
     def login_get(self):
-        # return render_template('login.html')
         pass
 
     def login_post(self):
@@ -55,6 +40,7 @@ class User_Access_DAO:
             "SELECT * FROM users WHERE username = %s", [username])
 
         user = {}
+
         if result > 0:  # if rows are found
             # Get stored hash
             user = cur.fetchone()
@@ -62,32 +48,19 @@ class User_Access_DAO:
             cur.close()  # Close connection
 
             password = user['password']
+            id = user['id']
 
         # Compare passwords
             if sha256_crypt.verify(password_candidate, password):
                 # Passed
                 session['logged_in'] = True
                 session['username'] = username
-                # session.permanent = 'logged_in' in session
-                # session.modified = True
-                print(session)
+                session['id'] = id
+            else:
+                return 'INVALID'
+        else:
+            return 'INVALID'
 
-                # flash('You are now logged in', 'success')
-        #         return redirect(url_for('users'))
-        #     else:
-        #         error = 'Invalid login'
-        #         return render_template('login.html', error=error)
-        # else:
-        #     error = 'Username not found'
-        #     return render_template('login.html', error=error)
-
-        # return redirect(url_for('login_get'))
-        # return 'The user ' + username + ' was logged in'
-        # return jsonify(logged_user)
-        # return session['username']
-        # session.save()
-        # session.persist()
-        # return jsonify(user)
         return user
 
     def logout(self):
@@ -96,10 +69,6 @@ class User_Access_DAO:
         return 'None'
 
     def status(self):
-        print('\n\n')
-        print('Status Get')
-        print('logged_in' in session)
-        print('\n\n')
         if 'logged_in' in session:
             # return jsonify(True)
             return True

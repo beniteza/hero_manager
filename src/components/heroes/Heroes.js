@@ -16,7 +16,7 @@ class Heroes extends Component {
           return (
             <React.Fragment>
               <h1 className="display-4 mb-2">
-                <span className="text-danger">Hero</span> List
+                <span className="text-primary">Hero</span> List
               </h1>
               {/* Loop through the array */}
               {/* Pass the state vals to the Hero component */}

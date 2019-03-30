@@ -11,6 +11,10 @@ class User extends Component {
 
   async componentDidMount() {
     //Get if the current logged in user is following this user
+    /*
+      - Route/Request that checks if logged-in user follows the user
+      - Returns true/false
+    */
 
     //Update state
     this.setState({
@@ -27,7 +31,7 @@ class User extends Component {
   };
 
   onFollowClick = async (id, e) => {
-    const res = await axios.post(`http://localhost:5000/followers/add/${id}`);
+    const res = await axios.post(`/followers/add/${id}`);
 
     this.setState({
       ...this.state,
@@ -48,28 +52,17 @@ class User extends Component {
             className="fas fa-sort-down"
             style={{ cursor: "pointer" }}
           />
-          {!following ? (
-            <i
-              onClick={this.onFollowClick.bind(this, id)}
-              className="fas fa-adjust"
-              style={{
-                cursor: "pointer",
-                float: "right",
-                color: "blue",
-                marginRight: "1rem"
-              }}
-            />
-          ) : (
-            <i
-              className="fas fa-adjust"
-              style={{
-                cursor: "pointer",
-                float: "right",
-                color: "yellow",
-                marginRight: "1rem"
-              }}
-            />
-          )}
+          <i
+            hidden={following}
+            onClick={this.onFollowClick.bind(this, id)}
+            className="fas fa-user-plus"
+            style={{
+              cursor: "pointer",
+              float: "right",
+              color: "blue",
+              marginRight: "1rem"
+            }}
+          />
           {/* <Link to={`user/heroes/${id}`}> */}
           <Link
             to={{
@@ -78,11 +71,12 @@ class User extends Component {
             }}
           >
             <i
-              className="fas fa-robot"
+              hidden={!following}
+              className="fas fa-expand-arrows-alt"
               style={{
                 cursor: "pointer",
                 float: "right",
-                color: "green",
+                color: "blue",
                 marginRight: "1rem"
               }}
             />

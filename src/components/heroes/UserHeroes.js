@@ -9,7 +9,7 @@ class UserHeroes extends Component {
 
   async componentDidMount() {
     const { id } = this.props.match.params;
-    const res = await axios.get(`http://localhost:5000/user/heroes/${id}`);
+    const res = await axios.get(`/user/heroes/${id}`);
     this.setState({
       heroes: res.data
     });
@@ -21,11 +21,13 @@ class UserHeroes extends Component {
     return (
       <React.Fragment>
         <h1 className="display-4 mb-2">
-          <span className="text-danger">{username}'s Hero</span> List
+          <span className="text-primary">{username}'s Hero</span> List
         </h1>
-        {heroes.map(hero => (
-          <Hero key={hero.id} hero={hero} />
-        ))}
+        {heroes.length !== 0 ? (
+          heroes.map(hero => <Hero key={hero.id} hero={hero} />)
+        ) : (
+          <h2>{username} has no heroes</h2>
+        )}
       </React.Fragment>
     );
   }

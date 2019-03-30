@@ -24,7 +24,7 @@ class Login extends Component {
     //Check for errors
     if (username === "") {
       this.setState({
-        errors: { name: "Username is required" }
+        errors: { username: "Username is required" }
       });
       return;
     }
@@ -40,28 +40,18 @@ class Login extends Component {
       password
     };
 
-    await axios.post("http://localhost:5000/login", qs.stringify(user));
-    // await axios.post(
-    //   "http://localhost:5000/login",
-    //   { withCredentials: true },
-    //   qs.stringify(user)
-    // );
-    // await axios("http://localhost:5000/login", {
-    //   method: "post",
-    //   data: JSON.stringify(qs.stringify(user)),
-    //   withCredentials: true,
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Access-Control-Allow-Credentials": "true",
-    //     "Content-Type": "application/json",
-    //     credentials: "true"
-    //   }
-    // });
+    const res = await axios.post("/login", qs.stringify(user));
 
-    // dispatch({ type: "IS_LOGGED_IN", payload: res.data });
+    //Check if login was invalid
+    if (res.data === "INVALID") {
+      this.setState({
+        errors: { username: "INVALID LOGIN", password: "INVALID LOGIN" }
+      });
+      return;
+    }
+
     dispatch({ type: "IS_LOGGED_IN", payload: true });
 
-    //CLEAR STATE AKA CLEAR WHAT'S ON THE FORM
     this.setState({
       username: "",
       password: "",
@@ -87,10 +77,10 @@ class Login extends Component {
                   <TextInputGroup
                     label="Username"
                     name="username"
-                    placeholder="Username"
+                    placeholder=""
                     value={username}
                     onChange={this.onChange}
-                    errors={errors.name}
+                    errors={errors.username}
                   />
                   <TextInputGroup
                     type="password"
@@ -99,7 +89,7 @@ class Login extends Component {
                     placeholder=""
                     value={password}
                     onChange={this.onChange}
-                    errors={errors.ability}
+                    errors={errors.password}
                   />
                   <input
                     type="submit"

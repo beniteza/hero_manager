@@ -36,11 +36,11 @@ class App extends Component {
                 {/* exact = matches the exact path */}
                 <Route exact path="/" component={Heroes} />
                 <PrivateRoute exact path="/hero/add" component={AddHero} />
-                <PrivateRoute
+                {/* <PrivateRoute
                   exact
                   path="/hero/edit/:id"
                   component={EditHero}
-                />
+                /> */}
                 <PrivateRoute
                   exact
                   path="/user/heroes/:id"

@@ -15,7 +15,6 @@ class AddHero extends Component {
     name: "",
     ability: "",
     power: "",
-    author: "",
     //for validation
     errors: {}
   };
@@ -25,12 +24,12 @@ class AddHero extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  onSubmit = async (dispatch, e) => {
+  onSubmit = async (dispatch, heroes, e) => {
     //prevent form from submiting any defaults
     e.preventDefault();
 
     //get vals from local state
-    const { name, ability, power, author } = this.state;
+    const { name, ability, power } = this.state;
 
     //Validation: Check for errors
     if (name === "") {
@@ -52,9 +51,17 @@ class AddHero extends Component {
       });
       return;
     }
-    if (author === "") {
+
+    //Check if hero name is taken
+    let isTaken = false;
+    heroes.forEach(hero => {
+      if (hero.name === name) {
+        isTaken = true;
+      }
+    });
+    if (isTaken) {
       this.setState({
-        errors: { author: "Author is required" }
+        errors: { name: `${name} already exists` }
       });
       return;
     }
@@ -63,16 +70,11 @@ class AddHero extends Component {
     const newHero = {
       name,
       ability,
-      power,
-      //REMOVE AUTHOR LATER
-      author
+      power
     };
 
     //qs helps send the actual data
-    const res = await axios.post(
-      "http://localhost:5000/hero/add",
-      qs.stringify(newHero)
-    );
+    const res = await axios.post("/hero/add", qs.stringify(newHero));
     //res.data is the hero that's being returned by the backend after the POST
     dispatch({ type: "ADD_HERO", payload: res.data });
 
@@ -81,7 +83,6 @@ class AddHero extends Component {
       name: "",
       ability: "",
       power: "",
-      author: "",
       //Clear errors
       errors: {}
     });
@@ -91,19 +92,19 @@ class AddHero extends Component {
   };
 
   render() {
-    const { name, ability, power, author, errors } = this.state;
+    const { name, ability, power, errors } = this.state;
 
     return (
       <Consumer>
         {/* This value contains the entire state from Context. Not this local state. Bringing disptach in allow us to add the new hero */}
         {value => {
-          const { dispatch } = value;
+          const { dispatch, heroes } = value;
           return (
             <div className="card mb-3">
-              <div className="card-header">Add Contact</div>
+              <div className="card-header">Add Hero</div>
               <div className="card-body">
                 {/* Pass the dispatch to this onSubmit to add the hero */}
-                <form onSubmit={this.onSubmit.bind(this, dispatch)}>
+                <form onSubmit={this.onSubmit.bind(this, dispatch, heroes)}>
                   <TextInputGroup
                     // pass the props
                     label="Name"
@@ -138,21 +139,10 @@ class AddHero extends Component {
                     onChange={this.onChange}
                     errors={errors.power}
                   />
-                  <TextInputGroup
-                    // pass the props
-                    label="Author"
-                    name="author"
-                    placeholder="Enter Author"
-                    //value is the one from the state
-                    value={author}
-                    //w/o this you can't change the state/form attrbs
-                    onChange={this.onChange}
-                    errors={errors.author}
-                  />
                   <input
                     type="submit"
                     value="Add Hero"
-                    className="btn btn-block btn-success"
+                    className="btn btn-block btn-primary"
                   />
                 </form>
               </div>

@@ -54,11 +54,15 @@ class Hero extends Component {
     const { id, name, ability, power, author } = this.props.hero;
     const { showContactInfo, wasAdded } = this.state;
 
+    /*
+      - Find a way to check if the user is the author of the hero and allow him to edit it
+      - Remove delete funct
+    */
+
     return (
       <Consumer>
         {value => {
-          const { dispatch } = value;
-          const { wasAdded } = this.state;
+          const { dispatch, isLoggedIn } = value;
           //value has heroes & dispatch
           return (
             <div className="card card-body mb-3">
@@ -71,36 +75,26 @@ class Hero extends Component {
                   style={{ cursor: "pointer" /*Makes the click ptr appear*/ }}
                 />
                 {/* Delete button */}
-                <i
+                {/* <i
                   className="fas fa-times"
                   style={{ cursor: "pointer", float: "right", color: "red" }}
                   // pass this to the delete func. payload is id and also pass dispatch. you got dispatch from destruct the value
                   onClick={this.onDeleteClick.bind(this, id, dispatch)}
+                /> */}
+                <i
+                  hidden={!isLoggedIn || wasAdded}
+                  onClick={this.onAddToCollectionClick.bind(this, id)}
+                  className="fas fa-plus"
+                  style={{
+                    cursor: "pointer",
+                    float: "right",
+                    color: "blue",
+                    marginRight: "1rem"
+                  }}
                 />
-                {!wasAdded ? (
+                {/* <Link to={`hero/edit/${id}`}>
                   <i
-                    onClick={this.onAddToCollectionClick.bind(this, id)}
-                    className="fas fa-adjust"
-                    style={{
-                      cursor: "pointer",
-                      float: "right",
-                      color: "green",
-                      marginRight: "1rem"
-                    }}
-                  />
-                ) : (
-                  <i
-                    className="fas fa-adjust"
-                    style={{
-                      cursor: "pointer",
-                      float: "right",
-                      color: "purple",
-                      marginRight: "1rem"
-                    }}
-                  />
-                )}
-                <Link to={`hero/edit/${id}`}>
-                  <i
+                    hidden={!isLoggedIn}
                     className="fas fa-pencil-alt"
                     style={{
                       cursor: "pointer",
@@ -109,7 +103,7 @@ class Hero extends Component {
                       marginRight: "1rem"
                     }}
                   />
-                </Link>
+                </Link> */}
               </h4>
               {/* If showContactInfo = true then show the info */}
               {showContactInfo ? (

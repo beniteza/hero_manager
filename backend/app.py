@@ -19,7 +19,8 @@ mysql = MySQL(app)
 #             r"/*": {"origins": "*"}, Access-Control-Allow-Headers: Set-Cookie})
 # app.config['Access-Control-Allow-Headers'] = 'Set-Cookie'
 # CORS(app, supports_credentials=True, send_wildcard=True)
-CORS(app, supports_credentials=True)
+
+# CORS(app, supports_credentials=True)
 
 
 @app.route('/')

@@ -51,22 +51,13 @@ export class Provider extends Component {
     }
   };
 
-  //GET THE HEROES FROM REST API
   //Lifecycle method & use axios for the fetch (get)
   async componentDidMount() {
-    //awaits waits for the async operation to finish
-    // const res = await axios.get("http://localhost:5000/heroes");
-    // this.setState({ heroes: res.data });
-
-    const res_1 = await axios.get("http://localhost:5000/heroes");
+    const res_1 = await axios.get("/heroes");
     const heroes = res_1.data;
-    const res_2 = await axios.get("http://localhost:5000/users");
+    const res_2 = await axios.get("/users");
     const users = res_2.data;
-    const res_3 = await axios.get("http://localhost:5000/status");
-    // const res_3 = await fetch("http://localhost:5000/status", {
-    //   method: "GET",
-    //   credentials: "include"
-    // });
+    const res_3 = await axios.get("/status");
 
     const isLoggedIn = res_3.data;
     console.log("STATUS: " + isLoggedIn);

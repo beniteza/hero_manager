@@ -12,52 +12,56 @@ class Header extends Component {
         {value => {
           const { isLoggedIn } = value;
           return (
-            <nav className="navbar navbar-expand-sm navbar-dark bg-danger mb-3 py-0">
+            <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-3 py-3">
               <div className="container">
-                <a href="/" className="navbar-brand">
+                <a
+                  href="/"
+                  className="navbar-brand"
+                  style={{ fontSize: "25px" }}
+                >
                   {branding}
                 </a>
                 <div className="">
                   <ul className="navbar-nav mr-auto">
-                    <li className="nav-item">
+                    <li className="nav-item" style={{ fontSize: "20px" }}>
                       <Link to="/" className="nav-link">
-                        <i className="fas fa-home" /> Home
+                        Home
                       </Link>
                     </li>
 
                     {isLoggedIn
                       ? [
-                          <li className="nav-item">
+                          <li className="nav-item" style={{ fontSize: "20px" }}>
                             <Link to="/hero/add" className="nav-link">
-                              <i className="fas fa-plus" /> Add
+                              Add
                             </Link>
                           </li>,
-                          <li className="nav-item">
+                          <li className="nav-item" style={{ fontSize: "20px" }}>
                             <Link to="/users" className="nav-link">
-                              <i className="fas fa-user" /> Users
+                              Users
                             </Link>
                           </li>,
-                          <li className="nav-item">
+                          <li className="nav-item" style={{ fontSize: "20px" }}>
                             <Link to="/logout" className="nav-link">
                               Logout
                             </Link>
                           </li>
                         ]
                       : [
-                          <li className="nav-item">
+                          <li className="nav-item" style={{ fontSize: "20px" }}>
                             <Link to="/login" className="nav-link">
                               Login
                             </Link>
                           </li>,
-                          <li className="nav-item">
+                          <li className="nav-item" style={{ fontSize: "20px" }}>
                             <Link to="/register" className="nav-link">
                               Register
                             </Link>
                           </li>
                         ]}
-                    <li className="nav-item">
+                    <li className="nav-item" style={{ fontSize: "20px" }}>
                       <Link to="/about" className="nav-link">
-                        <i className="fas fa-question" /> About
+                        About
                       </Link>
                     </li>
                   </ul>
