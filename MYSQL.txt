@@ -1,0 +1,46 @@
+#Install MYSQL:
+>> sudo apt-get install mysql-server libmysqlclient-dev
+
+#Login to MYSQL:
+>> sudo mysql -u root -p
+>> #ENTER THE PASSWORD YOU SET
+
+#If no Root Password prompt appeared after installation:
+>> sudo mysql_secure_installation
+###### https://stackoverflow.com/questions/47211545/fresh-mysql-server-installation-does-not-ask-for-password
+
+#If " access deniend for user 'root'@'localhost' " error:
+##Verify that if root is using "auth_socket":
+    mysql> USE mysql;
+    mysql> SELECT User, Host, plugin FROM mysql.user;
+##If so then:
+    mysql> USE mysql;
+    mysql> USE mysql;
+    mysql> UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+    mysql> FLUSH PRIVILEGES;
+    mysql> exit;
+##Then:
+>> service mysql restart
+##Login to MYSQL:
+>>
+##If access is denied then reset the password:
+>> sudo mysql_secure_installation
+###### https://stackoverflow.com/questions/39281594/error-1698-28000-access-denied-for-user-rootlocalhost
+
+#MYSQL Create DB & Tables
+    mysql> CREATE DATABASE testing_db;
+
+    mysql> CREATE TABLE users(id INT(11) AUTO_INCREMENT PRIMARY KEY, username VARCHAR(100), password VARCHAR(100));
+
+    mysql> CREATE TABLE heroes(id INT(11) AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100), ability VARCHAR(100), power VARCHAR(100), author VARCHAR(100));
+
+    mysql> CREATE TABLE followers(id INT(11) AUTO_INCREMENT PRIMARY KEY, user_id INT(11), follower_id INT(11));
+
+    mysql> CREATE TABLE hero_collection(id INT(11) AUTO_INCREMENT PRIMARY KEY, user_id INT(11), hero_id INT(11));
+
+#Python libraries:
+>> pip install flask
+>> pip install flask_mysqldb
+>> pip install passlib
+>> pip install wtforms
+>> pip install functools
